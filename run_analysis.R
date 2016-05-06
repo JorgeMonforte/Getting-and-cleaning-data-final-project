@@ -50,7 +50,7 @@ zip_file <- NULL # Path to the data if working from a zip file
 temp_file <- NULL # Path to a temp zip file, if not null it is deleted in
                   # the closing procedures
 
-run_cached <- FALSE # If sets to true it caches the features so you dont have
+run_cached <- TRUE # If sets to true it caches the features so you dont have
                    # to reload them each time you run get_features
 
 # --------------------------------------------------------------------------- 
