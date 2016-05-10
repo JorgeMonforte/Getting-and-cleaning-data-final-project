@@ -2,13 +2,14 @@
 UCI HAR Dataset features loader
 ===============================
 
+_IMPORTANT_: The script automatically downloads the data
+
 The run_script.R when sourced from R it downloads the packaged file from the
 provided url and loads the data from the contained and stores the data in the
-__selected_features__ and __summarized_selected_\_features__ variables.
+__selected_features__ and __summarized_selected_features__ variables.
 
 This is done with two functions:
 
--------------------------------
 get_mean_deviation_data_frame() 
 -------------------------------
 
@@ -22,16 +23,14 @@ Then a new data frame is created selecting the required columns using a regular
 expression, this data frame is then merged with the *activities* and *subjects*
 columns that are loaded from the corresponding files.
 
----------------------
 get_summarised_data(data)
----------------------
+-------------------------
 
 This functions takes the features data frame returned by the previous function
-and with it converted to a dplyr table it transforms it in two steps in a
-summarised table with the means computed for each column grouped by subject and
-activity.
+as an argument and with it converted to a dplyr table it transforms it in two
+steps in a summarised table with the means computed for each column grouped by
+subject and activity.
 
----------------
 Other functions
 ---------------
 
