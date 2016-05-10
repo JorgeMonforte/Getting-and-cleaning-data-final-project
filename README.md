@@ -4,7 +4,7 @@ UCI HAR Dataset features loader
 
 The run_script.R when sourced from R it downloads the packaged file from the
 provided url and loads the data from the contained and stores the data in the
-__features__ and __summarize\_features__ variables.
+__selected_features__ and __summarized_selected_\_features__ variables.
 
 This is done with two functions:
 
@@ -23,19 +23,19 @@ expression, this data frame is then merged with the *activities* and *subjects*
 columns that are loaded from the corresponding files.
 
 ---------------------
-get_summarised_data()
+get_summarised_data(data)
 ---------------------
 
-This function runs the previous one to build a data frame and with it converted
-to a dplyr table it transforms it in two steps in a summarised table with the
-means computed for each column grouped by subject and activity.
+This functions takes the features data frame returned by the previous function
+and with it converted to a dplyr table it transforms it in two steps in a
+summarised table with the means computed for each column grouped by subject and
+activity.
 
 ---------------
 Other functions
 ---------------
 
-- The *init_features* and *end_features* ensure that the required data is
-  downloaded and deleted
+- download_features function gets the zip file
 
 - The get...file opens a connection or returns the path to be loaded by the
   scripts

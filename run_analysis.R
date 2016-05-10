@@ -16,22 +16,19 @@ library(dplyr)
 # Returns the mean and deviation features set
 
 get_mean_deviation_data_frame <- function() {
-    init_features()
     features <- get_features()
     features <- extract_columns(features, regex="-mean|-std|Mean")
     features <- merge_activities(features)
-    features <- merge_subjects(features)
-    end_features()
-    features
+    merge_subjects(features)
 }
 
 # Computes de means grouped by subject and activity of the variables collected
 # with the function get_mean_deviation_data_frame
 
-get_summarised_data <- function() {
-    tbl_df(get_mean_deviation_data_frame()) %>% 
-            group_by(subject, activity) %>%
-            summarise_each(funs(mean))
+get_summarised_data <- function(data) {
+    tbl_df(data) %>% 
+        group_by(subject, activity) %>%
+        summarise_each(funs(mean))
 }
 
 
@@ -45,12 +42,9 @@ full_features <- NULL # Variable to cache the features set
 
 base_dir <- NULL # Path to the data if working from a directory
 
-zip_file <- NULL # Path to the data if working from a zip file
+zip_file <- "data.zip" # Path to the data if working from a zip file
 
-temp_file <- NULL # Path to a temp zip file, if not null it is deleted in
-                  # the closing procedures
-
-run_cached <- TRUE # If sets to true it caches the features so you dont have
+run_cached <- FALSE # If sets to true it caches the features so you dont have
                    # to reload them each time you run get_features
 
 # --------------------------------------------------------------------------- 
@@ -58,17 +52,10 @@ run_cached <- TRUE # If sets to true it caches the features so you dont have
 # --------------------------------------------------------------------------- 
 
 
-init_features <- function() {
-    if (is.null(zip_file) & is.null(base_dir)) {
-        zip_file <<- temp_file <<- tempfile()
-        download.file(package_url, temp_file)
+download_features <- function() {
+    if (!file.exists(zip_file)) {
+        download.file(package_url, zip_file)
     }
-}
-
-end_features <- function() {
-    if (! is.null(temp_file))
-        unlink(temp_file)
-        zip_file <<- temp_file <<- NULL
 }
 
 extract_columns <- function(df, regex="-mean|-std|Mean") {
@@ -119,7 +106,7 @@ get_features_colnames_file <- function () {
 
 load_features_col_names <- function () {
 	raw <- my_readLines(get_features_colnames_file())
-	sub("^[0-9]{1,3} ", "", raw)
+	gsub("^[0-9]{1,3} |\\(\\)", "", raw)
 }
 
 load_activities_labels <- function () {
@@ -185,6 +172,7 @@ merge_activities <- function(df, colname="activity") {
 
 # Lets run them ...
 
-features <- get_mean_deviation_data_frame()
-summarised_features <- get_summarised_data()
+download_features()
+selected_features <- get_mean_deviation_data_frame()
+summarised_selected_features <- get_summarised_data(selected_features)
 
